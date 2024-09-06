@@ -4,6 +4,7 @@ import Register from "./containers/Register";
 import Login from "./containers/Login";
 import { ThemeProvider } from "@emotion/react";
 import { CssBaseline } from "@mui/material";
+import { theme } from "./theme";
 
 const App = () => {
   return (
