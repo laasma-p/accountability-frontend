@@ -1,31 +1,79 @@
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
+import { Box, TextField, Typography, Button } from "@mui/material";
 
 const Register = () => {
   return (
-    <div>
-      <h1>Register</h1>
-      <Formik initialValues={{ firstName: "", email: "", password: "" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        padding: 2,
+      }}
+    >
+      <Typography
+        variant="h2"
+        sx={{
+          fontSize: { xs: "3rem", sm: "4rem" },
+          textAlign: "center",
+          marginBottom: 3,
+        }}
+      >
+        Register
+      </Typography>
+      <Formik
+        initialValues={{
+          firstName: "",
+          email: "",
+          password: "",
+        }}
+      >
         {() => {
           return (
-            <Form>
-              <div>
-                <label>First Name</label>
-                <Field name="firstName" type="text" />
-              </div>
-              <div>
-                <label>Email</label>
-                <Field name="email" type="email" />
-              </div>
-              <div>
-                <label>Password</label>
-                <Field name="password" type="password" />
-              </div>
-              <button type="submit">Register</button>
+            <Form style={{ width: "100%", maxWidth: "400px" }}>
+              <Box sx={{ marginBottom: 3 }}>
+                <TextField
+                  fullWidth
+                  name="firstName"
+                  label="First Name"
+                  variant="outlined"
+                  sx={{ marginBottom: "24px" }}
+                />
+                <TextField
+                  fullWidth
+                  name="email"
+                  label="E-mail"
+                  variant="outlined"
+                  sx={{ marginBottom: "24px" }}
+                />
+                <TextField
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="passowrd"
+                  variant="outlined"
+                  sx={{ marginBottom: "24px" }}
+                />
+                <Button
+                  fullWidth
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{
+                    padding: "10px 20px",
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                  }}
+                >
+                  Register
+                </Button>
+              </Box>
             </Form>
           );
         }}
       </Formik>
-    </div>
+    </Box>
   );
 };
 
