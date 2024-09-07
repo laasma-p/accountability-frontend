@@ -62,7 +62,7 @@ const Register = () => {
         validationSchema={RegisterSchema}
         onSubmit={registerHandler}
       >
-        {({ handleChange, values }) => {
+        {({ handleChange, handleBlur, values, errors, touched }) => {
           return (
             <Form style={{ width: "100%", maxWidth: "400px" }}>
               <Box sx={{ marginBottom: 3 }}>
@@ -72,7 +72,10 @@ const Register = () => {
                   label="First Name"
                   variant="outlined"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.firstName}
+                  error={touched.firstName && Boolean(errors.firstName)}
+                  helperText={touched.firstName && errors.firstName}
                   sx={{ marginBottom: "24px" }}
                 />
                 <TextField
@@ -81,7 +84,10 @@ const Register = () => {
                   label="E-mail"
                   variant="outlined"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.email}
+                  error={touched.email && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
                   sx={{ marginBottom: "24px" }}
                 />
                 <TextField
@@ -91,7 +97,10 @@ const Register = () => {
                   type="password"
                   variant="outlined"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.password}
+                  error={touched.password && Boolean(errors.password)}
+                  helperText={touched.password && errors.password}
                   sx={{ marginBottom: "24px" }}
                 />
                 <Button
