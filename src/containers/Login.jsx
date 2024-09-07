@@ -58,7 +58,7 @@ const Login = () => {
         validationSchema={LoginSchema}
         onSubmit={loginHandler}
       >
-        {({ handleChange, values }) => {
+        {({ handleChange, handleBlur, values, errors, touched }) => {
           return (
             <Form style={{ width: "100%", maxWidth: "400px" }}>
               <Box sx={{ marginBottom: 3 }}>
@@ -68,7 +68,10 @@ const Login = () => {
                   label="E-mail"
                   variant="outlined"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.email}
+                  error={touched.email && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
                   sx={{ marginBottom: "24px" }}
                 />
                 <TextField
@@ -78,7 +81,10 @@ const Login = () => {
                   type="password"
                   variant="outlined"
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   value={values.password}
+                  error={touched.password && Boolean(errors.password)}
+                  helperText={touched.password && errors.password}
                   sx={{ marginBottom: "24px" }}
                 />
                 <Button
