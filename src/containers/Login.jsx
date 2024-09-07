@@ -1,8 +1,17 @@
 import { Formik, Form } from "formik";
-import { Box, TextField, Typography, Button } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Typography,
+  Button,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import * as Yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useState } from "react";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -16,6 +25,11 @@ const LoginSchema = Yup.object().shape({
 
 const Login = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const loginHandler = (values) => {
     axios
@@ -78,7 +92,7 @@ const Login = () => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   variant="outlined"
                   onChange={handleChange}
                   onBlur={handleBlur}
@@ -86,6 +100,18 @@ const Login = () => {
                   error={touched.password && Boolean(errors.password)}
                   helperText={touched.password && errors.password}
                   sx={{ marginBottom: "24px" }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={togglePasswordVisibility}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <Button
                   fullWidth
