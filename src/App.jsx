@@ -4,6 +4,7 @@ import Landing from "./components/Landing";
 import Register from "./containers/Register";
 import Login from "./containers/Login";
 import PrivateRoute from "./components/PrivateRoute";
+import Navbar from "./components/Navbar";
 import Dashboard from "./containers/Dashboard";
 import AddHabit from "./components/AddHabit";
 import { lightTheme, darkTheme } from "./themes";
@@ -44,6 +45,9 @@ const App = () => {
           position: "relative",
         }}
       >
+        {isAuthenticated && (
+          <Navbar toggleTheme={toggleTheme} switchMode={switchMode} />
+        )}
         <Routes>
           <Route
             path="/"
@@ -57,7 +61,7 @@ const App = () => {
             path="/dashboard"
             element={
               <PrivateRoute>
-                <Dashboard toggleTheme={toggleTheme} switchMode={switchMode} />
+                <Dashboard />
               </PrivateRoute>
             }
           />
