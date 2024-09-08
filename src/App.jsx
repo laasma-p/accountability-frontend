@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Landing from "./components/Landing";
 import Register from "./containers/Register";
 import Login from "./containers/Login";
@@ -20,6 +20,8 @@ const App = () => {
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
+  const isAuthenticated = !!localStorage.getItem("token");
+
   return (
     <ThemeProvider theme={switchMode ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -32,7 +34,12 @@ const App = () => {
         }}
       >
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? <Navigate to="/dashboard" /> : <Landing />
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
