@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Landing from "./components/Landing";
 import Register from "./containers/Register";
@@ -14,13 +14,24 @@ const App = () => {
     return localStorage.getItem("theme") === "dark";
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => !!localStorage.getItem("token")
+  );
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
   const toggleTheme = () => {
     const newMode = !switchMode;
     setSwitchMode(newMode);
     localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
-  const isAuthenticated = !!localStorage.getItem("token");
+  const handleLoginState = () => {
+    setIsAuthenticated(true);
+  };
 
   return (
     <ThemeProvider theme={switchMode ? darkTheme : lightTheme}>
@@ -40,7 +51,7 @@ const App = () => {
               isAuthenticated ? <Navigate to="/dashboard" /> : <Landing />
             }
           />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login onLogin={handleLoginState} />} />
           <Route path="/register" element={<Register />} />
           <Route
             path="/dashboard"
