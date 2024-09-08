@@ -3,6 +3,9 @@ import { Routes, Route } from "react-router-dom";
 import Landing from "./components/Landing";
 import Register from "./containers/Register";
 import Login from "./containers/Login";
+import PrivateRoute from "./components/PrivateRoute";
+import Dashboard from "./containers/Dashboard";
+import AddHabit from "./components/AddHabit";
 import { lightTheme, darkTheme } from "./themes";
 import {
   ThemeProvider,
@@ -70,6 +73,23 @@ const App = () => {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-habit"
+            element={
+              <PrivateRoute>
+                <AddHabit />
+              </PrivateRoute>
+            }
+          />
+          <Route />
         </Routes>
       </Box>
     </ThemeProvider>
