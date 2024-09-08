@@ -23,7 +23,7 @@ const LoginSchema = Yup.object().shape({
     .matches(/^\S*$/, "Password must not contain spaces."),
 });
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,6 +36,7 @@ const Login = () => {
       .post("http://localhost:3000/api/login", values)
       .then((response) => {
         localStorage.setItem("token", response.data.token);
+        onLogin();
         navigate("/dashboard");
       })
       .catch((error) => {
