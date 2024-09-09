@@ -1,15 +1,6 @@
-import {
-  Box,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Tooltip,
-} from "@mui/material";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { Box, Typography } from "@mui/material";
 
-const Dashboard = ({ toggleTheme, switchMode }) => {
+const Dashboard = () => {
   return (
     <Box
       sx={{
@@ -17,23 +8,9 @@ const Dashboard = ({ toggleTheme, switchMode }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
       }}
     >
-      <AppBar>
-        <Toolbar>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-            Accountable
-          </Typography>
-          <Tooltip
-            title={switchMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            <IconButton color="inherit" onClick={toggleTheme}>
-              {switchMode ? <Brightness7Icon /> : <Brightness4Icon />}
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </AppBar>
+      <Typography variant="h6">Accountable</Typography>
       <Box>
         <Typography variant="body1">Dashboard will be here.</Typography>
       </Box>
