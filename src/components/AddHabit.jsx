@@ -20,7 +20,14 @@ import { AddCircle, CheckCircle } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 
 const AddHabitSchema = Yup.object().shape({
-  name: Yup.string().required("Please enter a habit."),
+  name: Yup.string()
+    .required("Please enter a habit.")
+    .min(3, "Habit must have at least 3 characters.")
+    .max(50, "Habit cannot exceed 50 characters.")
+    .matches(
+      /^[a-zA-Z0-9\s]+$/,
+      "Habit can only contain letters, numbers, and spaces."
+    ),
 });
 
 const AddHabit = () => {
@@ -171,13 +178,11 @@ const AddHabit = () => {
           })}
         </List>
       </Box>
-
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={5000}
         onClose={snackbarCloseHandler}
       >
-        {snackbarMessage}
         <Alert
           onClose={snackbarCloseHandler}
           severity={snackbarSeverity}
