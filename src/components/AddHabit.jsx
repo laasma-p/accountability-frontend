@@ -10,6 +10,8 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import * as Yup from "yup";
@@ -23,6 +25,9 @@ const AddHabitSchema = Yup.object().shape({
 
 const AddHabit = () => {
   const [userHabits, setUserHabits] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -33,8 +38,10 @@ const AddHabit = () => {
       .then((response) => {
         setUserHabits(response.data);
       })
-      .catch((error) => {
-        console.error(error.response?.data || error.message);
+      .catch(() => {
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Failed to load habits.");
+        setSnackbarOpen(true);
       });
   }, [token]);
 
@@ -49,10 +56,19 @@ const AddHabit = () => {
       })
       .then((response) => {
         setUserHabits((prevUserHabits) => [...prevUserHabits, response.data]);
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Habit added successfully!");
+        setSnackbarOpen(true);
       })
-      .catch((error) => {
-        console.error(error.response?.data || error.message);
+      .catch(() => {
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Failed to add the habit.");
+        setSnackbarOpen(true);
       });
+  };
+
+  const snackbarCloseHandler = () => {
+    setSnackbarOpen(false);
   };
 
   return (
@@ -117,6 +133,7 @@ const AddHabit = () => {
                   name="name"
                   label="Habit Name"
                   variant="outlined"
+                  color="secondary"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
@@ -126,7 +143,7 @@ const AddHabit = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <IconButton type="submit">
-                          <AddCircle color="primary" />
+                          <AddCircle color="secondary" />
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -154,6 +171,21 @@ const AddHabit = () => {
           })}
         </List>
       </Box>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={5000}
+        onClose={snackbarCloseHandler}
+      >
+        {snackbarMessage}
+        <Alert
+          onClose={snackbarCloseHandler}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
