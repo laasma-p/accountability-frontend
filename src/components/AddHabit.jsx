@@ -6,18 +6,37 @@ import {
   IconButton,
   InputAdornment,
   Button,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import * as Yup from "yup";
 import axios from "axios";
 import { AddCircle, CheckCircle } from "@mui/icons-material";
+import { useState, useEffect } from "react";
 
 const AddHabitSchema = Yup.object().shape({
   name: Yup.string().required("Please enter a habit."),
 });
 
 const AddHabit = () => {
+  const [userHabits, setUserHabits] = useState([]);
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/habits", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUserHabits(response.data);
+      })
+      .catch((error) => {
+        console.error(error.response?.data || error.message);
+      });
+  }, [token]);
 
   const predefinedHabits = ["Exercise", "Read", "Meditate", "Journal"];
 
@@ -28,8 +47,8 @@ const AddHabit = () => {
       .post("http://localhost:3000/api/habits", habitData, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(() => {
-        console.log("The habit is added.");
+      .then((response) => {
+        setUserHabits((prevUserHabits) => [...prevUserHabits, response.data]);
       })
       .catch((error) => {
         console.error(error.response?.data || error.message);
@@ -117,6 +136,23 @@ const AddHabit = () => {
             );
           }}
         </Formik>
+      </Box>
+      <Box sx={{ width: "100%", maxWidth: "600px", marginY: "2rem" }}>
+        <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
+          Added habits
+        </Typography>
+        <List>
+          {userHabits.map((userHabit) => {
+            return (
+              <Box key={userHabit.id}>
+                <ListItem sx={{ paddingY: "0.5rem" }}>
+                  <ListItemText primary={userHabit.name} />
+                </ListItem>
+                <Divider />
+              </Box>
+            );
+          })}
+        </List>
       </Box>
     </Box>
   );
