@@ -1,4 +1,7 @@
 import { useState } from "react";
+import { Box, Paper, Button, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 
 // Array of day names starting from Monday
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -49,9 +52,25 @@ const Calendar = () => {
   }
 
   return (
-    <div>
-      <header>
-        <button
+    <Box sx={{ maxWidth: 800, margin: "0 auto", padding: 2 }}>
+      <Paper
+        sx={{
+          display: "flex",
+          justifyContent: "space-around",
+          alignItems: "center",
+          paddingY: 2,
+          paddingX: 0.5,
+          marginBottom: 2,
+          borderRadius: 2,
+          backgroundColor: "background.paper",
+          boxShadow: 3,
+        }}
+        elevation={3}
+      >
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<ArrowBack />}
           onClick={() =>
             setCurrentDate(
               new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
@@ -59,12 +78,15 @@ const Calendar = () => {
           }
         >
           Prev
-        </button>
-        <h2>
+        </Button>
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {currentDate.toLocaleString("default", { month: "long" })}{" "}
           {currentDate.getFullYear()}
-        </h2>
-        <button
+        </Typography>
+        <Button
+          variant="outlined"
+          color="secondary"
+          endIcon={<ArrowForward />}
           onClick={() =>
             setCurrentDate(
               new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
@@ -72,31 +94,57 @@ const Calendar = () => {
           }
         >
           Next
-        </button>
-      </header>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(7, 1fr)",
-          gap: "5px",
-        }}
+        </Button>
+      </Paper>
+      <Grid
+        container
+        spacing={1}
+        sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)" }}
       >
         {days.map((day) => {
           return (
-            <div key={day} style={{ textAlign: "center", fontWeight: "bold" }}>
-              {day}
-            </div>
+            <Grid key={day}>
+              <Paper
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "secondary.light",
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  padding: 1,
+                }}
+                elevation={1}
+              >
+                <Typography variant="body1">{day}</Typography>
+              </Paper>
+            </Grid>
           );
         })}
         {daysArray.map((day, index) => {
           return (
-            <div key={index} style={{ textAlign: "center" }}>
-              {day}
-            </div>
+            <Grid key={index}>
+              <Paper
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  borderRadius: 2,
+                  boxShadow: 1,
+                  padding: 2,
+                }}
+                elevation={1}
+              >
+                <Typography variant="body1">{day}</Typography>
+              </Paper>
+            </Grid>
           );
         })}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 };
 
