@@ -34,9 +34,17 @@ const Calendar = () => {
   // Array to hold all the days to be displayed in the calendar
   const daysArray = [];
 
-  // Fill in the days of the previous month, ensuring the calendar starts on the correct weekday
+  // Fill in the days of the previous month
+  const previousMonthEnd = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    0
+  );
+
+  const previousMonthDays = previousMonthEnd.getDate();
+
   for (let i = startDay - 1; i >= 0; i--) {
-    daysArray.push("");
+    daysArray.push(previousMonthDays - i);
   }
 
   // Fill in the days of the current month
@@ -44,11 +52,14 @@ const Calendar = () => {
     daysArray.push(i);
   }
 
+  // Calculate how many days are needed to complete the last week
   const totalCells = 42;
+  const daysInLastWeek = (totalCells - daysArray.length) % 7;
+  const daysFromNextMonth = daysInLastWeek > 0 ? daysInLastWeek : 8;
 
-  // Add days from the next month to the calendar to fill the grid
-  while (daysArray.length < totalCells) {
-    daysArray.push("");
+  // Add days from the last month only if needed
+  for (let i = 1; i <= daysFromNextMonth; i++) {
+    daysArray.push(i);
   }
 
   return (
