@@ -16,7 +16,7 @@ import {
 import Grid from "@mui/material/Grid2";
 import * as Yup from "yup";
 import axios from "axios";
-import { AddCircle, CheckCircle } from "@mui/icons-material";
+import { AddCircle, CheckCircle, Delete } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 
 const AddHabitSchema = Yup.object().shape({
@@ -77,6 +77,26 @@ const AddHabit = () => {
       .catch(() => {
         setSnackbarSeverity("error");
         setSnackbarMessage("Failed to add the habit.");
+        setSnackbarOpen(true);
+      });
+  };
+
+  const deleteHabitHandler = (id) => {
+    axios
+      .delete(`http://localhost:3000/api/habits/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then(() => {
+        setUserHabits((prevUserHabits) =>
+          prevUserHabits.filter((habit) => habit.id !== id)
+        );
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Habit deleted successfully!");
+        setSnackbarOpen(true);
+      })
+      .catch(() => {
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Failed to delete the habit.");
         setSnackbarOpen(true);
       });
   };
@@ -185,7 +205,18 @@ const AddHabit = () => {
             {userHabits.map((userHabit) => {
               return (
                 <Box key={userHabit.id}>
-                  <ListItem sx={{ paddingY: "0.5rem" }}>
+                  <ListItem
+                    sx={{ paddingY: "0.5rem" }}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        color="error"
+                        onClick={() => deleteHabitHandler(userHabit.id)}
+                      >
+                        <Delete />
+                      </IconButton>
+                    }
+                  >
                     <ListItemText primary={userHabit.name} />
                   </ListItem>
                   <Divider />
