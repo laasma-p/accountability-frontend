@@ -54,40 +54,7 @@ const AddHabit = () => {
     name: Yup.string()
       .required("Please enter a habit.")
       .min(3, "Habit must have at least 3 characters.")
-      .max(50, "Habit cannot exceed 50 characters.")
-      .matches(
-        /^[a-zA-Z0-9\s]+$/,
-        "Habit can only contain letters, numbers, and spaces."
-      )
-      .test(
-        "is-unique",
-        "The habit is either pre-defined or already added.",
-        (value) => {
-          const habitName = value?.trim().toLowerCase();
-
-          const habitIsPredefined = predefinedHabits.some(
-            (habit) => habit.toLowerCase() === habitName
-          );
-
-          const habitExists = userHabits.some(
-            (habit) => habit.name.toLowerCase() === habitName
-          );
-
-          if (habitIsPredefined) {
-            return new Yup.ValidationError(
-              "Add this habit from pre-defined list."
-            );
-          }
-
-          if (habitExists) {
-            return new Yup.ValidationError(
-              "The habit already exists in the list."
-            );
-          }
-
-          return true;
-        }
-      ),
+      .max(50, "Habit cannot exceed 50 characters."),
   });
 
   const addHabitHandler = (values) => {
@@ -172,12 +139,7 @@ const AddHabit = () => {
                   fontSize: { xs: "0.8rem", sm: "1rem" },
                   textTransform: "none",
                 }}
-                disabled={
-                  userHabits.some(
-                    (userHabit) =>
-                      userHabit.name.toLowerCase() === habit.toLowerCase()
-                  ) || loading
-                }
+                disabled={loading}
               >
                 {habit}
               </Button>
