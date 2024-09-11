@@ -61,7 +61,7 @@ const AddHabit = () => {
       )
       .test(
         "is-unique",
-        "The habit is either pre-defined or already hadded.",
+        "The habit is either pre-defined or already added.",
         (value) => {
           const habitName = value?.trim().toLowerCase();
 
