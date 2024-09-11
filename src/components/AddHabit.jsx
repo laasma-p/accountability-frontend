@@ -54,7 +54,21 @@ const AddHabit = () => {
     name: Yup.string()
       .required("Please enter a habit.")
       .min(3, "Habit must have at least 3 characters.")
-      .max(50, "Habit cannot exceed 50 characters."),
+      .max(50, "Habit cannot exceed 50 characters.")
+      .test("unique-habit", "Habit is already added.", (value) => {
+        if (!value) {
+          return true;
+        }
+
+        return (
+          !userHabits.some(
+            (habit) => habit.name.toLowerCase() === value.toLowerCase()
+          ) &&
+          !predefinedHabits.some(
+            (habit) => habit.toLowerCase() === value.toLowerCase()
+          )
+        );
+      }),
   });
 
   const addHabitHandler = (values) => {
@@ -126,6 +140,9 @@ const AddHabit = () => {
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         {predefinedHabits.map((habit) => {
+          const isHabitAdded = userHabits.some(
+            (userHabit) => userHabit.name.toLowerCase() === habit.toLowerCase()
+          );
           return (
             <Grid xs={12} sm={6} md={3} key={habit}>
               <Button
@@ -139,7 +156,7 @@ const AddHabit = () => {
                   fontSize: { xs: "0.8rem", sm: "1rem" },
                   textTransform: "none",
                 }}
-                disabled={loading}
+                disabled={loading || isHabitAdded}
               >
                 {habit}
               </Button>
@@ -154,9 +171,37 @@ const AddHabit = () => {
         <Formik
           initialValues={{ name: "" }}
           validationSchema={AddHabitSchema}
+          validateOnChange={true}
+          validateOnBlur={true}
           onSubmit={addHabitHandler}
         >
           {({ handleChange, handleBlur, values, touched, errors }) => {
+            const isPredefinedHabit = predefinedHabits.some(
+              (habit) =>
+                habit.toLowerCase() === values.name.trim().toLowerCase()
+            );
+
+            const isHabitAlreadyAdded = userHabits.some(
+              (userHabit) =>
+                userHabit.name.toLowerCase() ===
+                values.name.trim().toLowerCase()
+            );
+
+            const hasError =
+              (touched.name && Boolean(errors.name)) ||
+              isHabitAlreadyAdded ||
+              isPredefinedHabit;
+
+            let helperText = touched.name && errors.name;
+
+            if (isPredefinedHabit && isHabitAlreadyAdded) {
+              helperText = "This habit is already on the list.";
+            } else if (isPredefinedHabit) {
+              helperText = "Add the habit from pre-defined habits.";
+            } else if (isHabitAlreadyAdded) {
+              helperText = "This habit is already on the list.";
+            }
+
             return (
               <Form style={{ width: "100%", maxWidth: "400px" }}>
                 <TextField
@@ -168,8 +213,8 @@ const AddHabit = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
-                  error={touched.name && Boolean(errors.name)}
-                  helperText={touched.name && errors.name}
+                  error={hasError}
+                  helperText={helperText}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
