@@ -35,6 +35,7 @@ const AddHabit = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -43,12 +44,18 @@ const AddHabit = () => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        setUserHabits(response.data);
+        if (response.data.length === 0) {
+          setUserHabits([]);
+        } else {
+          setUserHabits(response.data);
+        }
+        setLoading(false);
       })
       .catch(() => {
         setSnackbarSeverity("error");
         setSnackbarMessage("Failed to load habits.");
         setSnackbarOpen(true);
+        setLoading(false);
       });
   }, [token]);
 
@@ -116,6 +123,7 @@ const AddHabit = () => {
                   fontSize: { xs: "0.8rem", sm: "1rem" },
                   textTransform: "none",
                 }}
+                disabled={loading}
               >
                 {habit}
               </Button>
@@ -149,12 +157,17 @@ const AddHabit = () => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton type="submit">
-                          <AddCircle color="secondary" />
+                        <IconButton
+                          type="submit"
+                          color="secondary"
+                          disabled={loading}
+                        >
+                          <AddCircle />
                         </IconButton>
                       </InputAdornment>
                     ),
                   }}
+                  disabled={loading}
                 />
               </Form>
             );
@@ -165,18 +178,24 @@ const AddHabit = () => {
         <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
           Added habits
         </Typography>
-        <List>
-          {userHabits.map((userHabit) => {
-            return (
-              <Box key={userHabit.id}>
-                <ListItem sx={{ paddingY: "0.5rem" }}>
-                  <ListItemText primary={userHabit.name} />
-                </ListItem>
-                <Divider />
-              </Box>
-            );
-          })}
-        </List>
+        {loading ? (
+          <Typography>Loading habits...</Typography>
+        ) : userHabits.length > 0 ? (
+          <List>
+            {userHabits.map((userHabit) => {
+              return (
+                <Box key={userHabit.id}>
+                  <ListItem sx={{ paddingY: "0.5rem" }}>
+                    <ListItemText primary={userHabit.name} />
+                  </ListItem>
+                  <Divider />
+                </Box>
+              );
+            })}
+          </List>
+        ) : (
+          <Typography>No items as of now. Add some to get started.</Typography>
+        )}
       </Box>
       <Snackbar
         open={snackbarOpen}
