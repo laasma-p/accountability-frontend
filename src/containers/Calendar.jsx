@@ -10,6 +10,9 @@ const Calendar = () => {
   // State to hold the current date
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Setting time to midnight
+
   // Getting the first day of the current month
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -44,22 +47,47 @@ const Calendar = () => {
   const previousMonthDays = previousMonthEnd.getDate();
 
   for (let i = startDay - 1; i >= 0; i--) {
-    daysArray.push(previousMonthDays - i);
+    daysArray.push({
+      day: previousMonthDays - i,
+      isCurrentMonth: false,
+      isDisabled: true,
+      isPast: false,
+      isNextMonth: false,
+    });
   }
 
   // Fill in the days of the current month
   for (let i = 1; i <= totalDays; i++) {
-    daysArray.push(i);
+    const dayDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      i
+    );
+
+    daysArray.push({
+      day: i,
+      isCurrentMonth: true,
+      isDisabled: dayDate < today, // Disable if the date is before the current date
+      isPast: dayDate < today, // Mark a date as past date if the date is before today
+      isNextMonth: false,
+      isToday: dayDate.toDateString() === today.toDateString(), // Check if the date is today's date
+    });
   }
 
   // Calculate how many days are needed to complete the last week
   const totalCells = 42;
   const daysInLastWeek = (totalCells - daysArray.length) % 7;
-  const daysFromNextMonth = daysInLastWeek > 0 ? daysInLastWeek : 8;
+  const daysFromNextMonth = daysInLastWeek > 0 ? daysInLastWeek : 0;
 
-  // Add days from the last month only if needed
+  // Add days from the next month only if needed
   for (let i = 1; i <= daysFromNextMonth; i++) {
-    daysArray.push(i);
+    daysArray.push({
+      day: i,
+      isCurrentMonth: false,
+      isDisabled: true,
+      isPast: false,
+      isNextMonth: true,
+    });
   }
 
   return (
@@ -134,26 +162,49 @@ const Calendar = () => {
             </Grid>
           );
         })}
-        {daysArray.map((day, index) => {
-          return (
-            <Grid key={index}>
-              <Paper
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  textAlign: "center",
-                  borderRadius: 2,
-                  boxShadow: 1,
-                  padding: 2,
-                }}
-                elevation={1}
-              >
-                <Typography variant="body1">{day}</Typography>
-              </Paper>
-            </Grid>
-          );
-        })}
+        {daysArray.map(
+          (
+            { day, isCurrentMonth, isDisabled, isPast, isNextMonth, isToday },
+            index
+          ) => {
+            return (
+              <Grid key={index}>
+                <Paper
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    borderRadius: 2,
+                    boxShadow: 1,
+                    padding: 2,
+                    backgroundColor: isCurrentMonth
+                      ? isToday
+                        ? "primary.main"
+                        : isPast
+                        ? "action.disabled.past"
+                        : "background.paper"
+                      : isNextMonth
+                      ? "action.disabled.nextMonth"
+                      : "action.disabled.previousMonth",
+                    color: isCurrentMonth
+                      ? isToday
+                        ? "background.paper"
+                        : isPast
+                        ? "text.disabled"
+                        : "text.primary"
+                      : "text.disabled",
+                    cursor:
+                      isCurrentMonth && !isDisabled ? "pointer" : "not-allowed",
+                  }}
+                  elevation={1}
+                >
+                  <Typography variant="body1">{day}</Typography>
+                </Paper>
+              </Grid>
+            );
+          }
+        )}
       </Grid>
     </Box>
   );
