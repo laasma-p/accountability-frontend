@@ -111,6 +111,28 @@ const AddHabit = () => {
       });
   };
 
+  const trackHabitHandler = (id) => {
+    axios
+      .post(`http://localhost:3000/api/habits/${id}/track`, null, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setUserHabits((prevUserHabits) =>
+          prevUserHabits.map((habit) =>
+            habit.id === id ? response.data : habit
+          )
+        );
+        setSnackbarSeverity("success");
+        setSnackbarMessage("Habit is started to be tracked.");
+        setSnackbarOpen(true);
+      })
+      .catch(() => {
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Failed to start tracking the habit.");
+        setSnackbarOpen(true);
+      });
+  };
+
   const snackbarCloseHandler = () => {
     setSnackbarOpen(false);
   };
@@ -249,13 +271,22 @@ const AddHabit = () => {
                   <ListItem
                     sx={{ paddingY: "0.5rem" }}
                     secondaryAction={
-                      <IconButton
-                        edge="end"
-                        color="error"
-                        onClick={() => deleteHabitHandler(userHabit.id)}
-                      >
-                        <Delete />
-                      </IconButton>
+                      <>
+                        <IconButton
+                          edge="end"
+                          color="primary"
+                          onClick={() => trackHabitHandler(userHabit.id)}
+                        >
+                          <CheckCircle />
+                        </IconButton>
+                        <IconButton
+                          edge="end"
+                          color="error"
+                          onClick={() => deleteHabitHandler(userHabit.id)}
+                        >
+                          <Delete />
+                        </IconButton>
+                      </>
                     }
                   >
                     <ListItemText primary={userHabit.name} />
