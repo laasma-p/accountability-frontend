@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Paper, Button, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
@@ -6,9 +6,15 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 // Array of day names starting from Monday
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-const Calendar = () => {
-  // State to hold the current date
+const Calendar = ({ onDateSelect }) => {
+  // State to hold the current date and currently selected date
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  useEffect(() => {
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+    onDateSelect(formattedDate);
+  }, [selectedDate]);
 
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Setting time to midnight
@@ -81,6 +87,21 @@ const Calendar = () => {
       isNextMonth: true,
     });
   }
+
+  const handleClick = (day) => {
+    if (day.isDisabled) {
+      return;
+    }
+
+    const newDate = new Date(
+      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), day.day)
+    );
+
+    const formattedDate = newDate.toISOString().split("T")[0];
+
+    setSelectedDate(newDate);
+    onDateSelect(formattedDate);
+  };
 
   return (
     <Box sx={{ maxWidth: 800, margin: "0 auto", padding: 2 }}>
@@ -200,6 +221,7 @@ const Calendar = () => {
                       isCurrentMonth && !isDisabled ? "pointer" : "not-allowed",
                   }}
                   elevation={1}
+                  onClick={() => handleClick({ day, isDisabled })}
                 >
                   <Typography variant="body1">{day}</Typography>
                 </Paper>
