@@ -15,36 +15,30 @@ const Calendar = () => {
 
   // Getting the first day of the current month
   const startOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    1
+    Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 1)
   );
 
   // Getting the day of the week of the first day of the month
   // Adjusting to start the week on Monday (0 = Sunday, 1 = Monday and so on and so forth)
-  const startDay = (startOfMonth.getDay() + 6) % 7;
+  const startDay = (startOfMonth.getUTCDay() + 6) % 7;
 
   // Get the last day of the current month
   const endOfMonth = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth() + 1,
-    0
+    Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, 0)
   );
 
   // Total number of days in the current month
-  const totalDays = endOfMonth.getDate();
+  const totalDays = endOfMonth.getUTCDate();
 
   // Array to hold all the days to be displayed in the calendar
   const daysArray = [];
 
   // Fill in the days of the previous month
   const previousMonthEnd = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    0
+    Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), 0)
   );
 
-  const previousMonthDays = previousMonthEnd.getDate();
+  const previousMonthDays = previousMonthEnd.getUTCDate();
 
   for (let i = startDay - 1; i >= 0; i--) {
     daysArray.push({
@@ -59,9 +53,7 @@ const Calendar = () => {
   // Fill in the days of the current month
   for (let i = 1; i <= totalDays; i++) {
     const dayDate = new Date(
-      currentDate.getFullYear(),
-      currentDate.getMonth(),
-      i
+      Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), i)
     );
 
     daysArray.push({
@@ -112,7 +104,12 @@ const Calendar = () => {
           startIcon={<ArrowBack />}
           onClick={() =>
             setCurrentDate(
-              new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
+              new Date(
+                Date.UTC(
+                  currentDate.getutcFullYear(),
+                  currentDate.getutcMonth() - 1
+                )
+              )
             )
           }
         >
@@ -120,7 +117,7 @@ const Calendar = () => {
         </Button>
         <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           {currentDate.toLocaleString("default", { month: "long" })}{" "}
-          {currentDate.getFullYear()}
+          {currentDate.getUTCFullYear()}
         </Typography>
         <Button
           variant="outlined"
@@ -128,7 +125,12 @@ const Calendar = () => {
           endIcon={<ArrowForward />}
           onClick={() =>
             setCurrentDate(
-              new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
+              new Date(
+                Date.UTC(
+                  currentDate.getUTCFullYear(),
+                  currentDate.getUTCMonth() + 1
+                )
+              )
             )
           }
         >
