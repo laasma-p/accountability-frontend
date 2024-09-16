@@ -127,8 +127,8 @@ const Calendar = ({ onDateSelect }) => {
             setCurrentDate(
               new Date(
                 Date.UTC(
-                  currentDate.getutcFullYear(),
-                  currentDate.getutcMonth() - 1
+                  currentDate.getUTCFullYear(),
+                  currentDate.getUTCMonth() - 1
                 )
               )
             )
