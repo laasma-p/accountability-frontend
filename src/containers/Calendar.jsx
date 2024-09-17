@@ -12,6 +12,7 @@ const Calendar = ({ onDateSelect }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
 
   useEffect(() => {
+    // Convert to UTC date and format it as YYYY-MM-DD
     const formattedDate = selectedDate.toISOString().split("T")[0];
     onDateSelect(formattedDate);
   }, [selectedDate]);
@@ -97,10 +98,7 @@ const Calendar = ({ onDateSelect }) => {
       Date.UTC(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), day.day)
     );
 
-    const formattedDate = newDate.toISOString().split("T")[0];
-
     setSelectedDate(newDate);
-    onDateSelect(formattedDate);
   };
 
   return (
