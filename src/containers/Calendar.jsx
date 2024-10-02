@@ -18,7 +18,7 @@ const Calendar = ({ onDateSelect }) => {
   }, [selectedDate]);
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // Setting time to midnight
+  today.setUTCHours(0, 0, 0, 0); // Setting time to midnight
 
   // Getting the first day of the current month
   const startOfMonth = new Date(
