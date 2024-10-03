@@ -4,17 +4,33 @@ const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#c9dabf",
+      main: "#C9DABF",
+      contrastText: "#232323",
     },
     secondary: {
-      main: "#9ca986",
+      main: "#9CA986",
+      contrastText: "#F5F5F5",
     },
     background: {
-      default: "#f5f5f5",
+      default: "#F5F5F5",
+      paper: "#FFFFFF",
+      highlightedDate: "#C9DABF",
     },
     text: {
-      primary: "#232323",
+      primary: "#5F6F65",
+      secondary: "#808D7C",
+      disabled: "#9E9E9E",
     },
+    action: {
+      active: "#9CA986",
+      hover: "#C9DABF",
+      disabled: {
+        past: "#E0E0E0",
+        previousMonth: "#F0F0F0",
+        nextMonth: "#F0F0F0",
+      },
+    },
+    divider: "#E0E0E0",
   },
 });
 
@@ -22,17 +38,33 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#808d7c",
+      main: "#808D7C",
+      contrastText: "#F5F5F5",
     },
     secondary: {
       main: "#9ca986",
+      contrastText: "#232323",
     },
     background: {
       default: "#232323",
+      paper: "#303030",
+      highlightedDate: "#808D7C",
     },
     text: {
-      primary: "#f5f5f5",
+      primary: "#C9DABF",
+      secondary: "#9CA986",
+      disabled: "#9E9E9E",
     },
+    action: {
+      active: "#9CA986",
+      hover: "#808D7C",
+      disabled: {
+        past: "#616161",
+        previousMonth: "#424242",
+        nextMonth: "#424242",
+      },
+    },
+    divider: "#424242",
   },
 });
 
